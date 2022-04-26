@@ -42,6 +42,7 @@ public class Response {
 
     public void error() {
         this.error = 1;
+        this.data = null;
     }
 
     public void successRetrieving() {
