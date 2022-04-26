@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import java.text.ParseException;
 
 import com.example.demo.helper.Response;
 import com.example.demo.model.Transaction;
 import com.example.demo.repository.TransactionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +31,16 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
+    public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) throws ParseException {
+
+        if (transaction.isDateFuture()) {
+            response.error();
+            response.setMessage("Please check your date!");
+
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        
+        transactionRepository.create(transaction);
 
         response.setMessage("Transaction created successfully");
         response.setData(transaction);

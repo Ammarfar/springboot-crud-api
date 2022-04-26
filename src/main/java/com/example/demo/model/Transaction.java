@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.*;
 
@@ -57,5 +60,16 @@ public class Transaction {
 
     public void setTrxDate(Date trxDate) {
         this.trxDate = trxDate;
+    }
+
+    public Boolean isDateFuture() throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", new Locale("in", "IN"));
+        String now = simpleDateFormat.format(new Date());
+        String date = simpleDateFormat.format(this.trxDate);
+
+        if (now.compareTo(date) < 0)
+            return true;
+
+        return false;
     }
 }
