@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 
+import com.example.demo.helper.Response;
 import com.example.demo.model.Transaction;
 import com.example.demo.repository.TransactionRepository;
 
@@ -22,35 +21,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransactionController {
 
     private TransactionRepository transactionRepository;
-    private HashMap<String, Object> map = new HashMap<>();
+    private Response response = new Response();
 
     @Autowired
     public TransactionController(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
-
-        map.put("error", 0);
-        map.put("message", "success retrieving data!");
-        map.put("data", null);
     }
 
     @PostMapping("/transaction")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
-        transactionRepository.create(transaction);
 
-        map.put("message", "Transaction created successfully");
-        map.put("data", transaction);
+        response.setMessage("Transaction created successfully");
+        response.setData(transaction);
 
-        return ResponseEntity.ok(map);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/transactions")
-    public Map<String, Object> getTransactions(
+    public ResponseEntity<?> getTransactions(
             @RequestParam(required = false) String from,
             @RequestParam(required = false) String to,
             @RequestParam(required = false) Integer userId) {
 
-        map.put("data", transactionRepository.findAll(from, to, userId));
+        response.successRetrieving();
+        response.setData(transactionRepository.findAll(from, to, userId));
 
-        return map;
+        return ResponseEntity.ok(response);
     }
 }
