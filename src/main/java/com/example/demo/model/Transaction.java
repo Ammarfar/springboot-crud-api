@@ -7,6 +7,8 @@ import java.util.Locale;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name = "transactions")
 @Table(name = "transactions")
 
@@ -62,6 +64,7 @@ public class Transaction {
         this.trxDate = trxDate;
     }
 
+    @JsonIgnore
     public Boolean isDateFuture() throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", new Locale("in", "IN"));
         String now = simpleDateFormat.format(new Date());
